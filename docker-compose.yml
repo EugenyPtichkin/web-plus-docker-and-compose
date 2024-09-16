@@ -1,0 +1,46 @@
+services:
+  backend:
+    restart: always
+    container_name: kupipodariday-backend
+    build: 
+      context: backend
+      dockerfile: Dockerfile
+    image: kupipodariday-backend
+    ports:
+      - 4000:3000
+    env_file:
+      - .env
+    networks:
+      - backend
+    depends_on:
+      - database
+
+  frontend:
+    restart: always
+    container_name: kupipodariday-frontend
+    build: 
+      context: frontend
+      dockerfile: Dockerfile
+    image: kupipodariday-frontend
+    ports:
+      - 8081:80
+    networks:
+      - frontend
+
+  database:
+    restart: always
+    container_name: postgres
+    image: postgres
+    volumes:
+      - postgres_data:/data/postgres
+    env_file:
+      - .env
+    networks:
+      - backend
+  
+volumes:
+  postgres_data:
+
+networks:
+  frontend:
+  backend:
