@@ -12,11 +12,12 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   ) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-      secretOrKey: configService.get<string>('jwt_secret'),
+      secretOrKey: configService.get<string>('JWT_SECRET'),
     });
   }
 
   async validate(jwtPayload: { sub: number }) {
+    console.log(jwtPayload);
     const user = this.usersService.findOneById(jwtPayload.sub);
     if (!user) {
       throw new UnauthorizedException('Некорректный токен');
